@@ -19,10 +19,6 @@ namespace UdemyDotnetCourse.Services.CharacterService
             _mapper = mapper;
             _db = db;
         }
-
-
-
-
         public async Task<ServiceResponse<List<GetCharacterDto>>> AddCharacter(AddCharacterDto newCharacter)
         {
             var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
@@ -33,10 +29,10 @@ namespace UdemyDotnetCourse.Services.CharacterService
             return serviceResponse ;
         }
 
-        public async Task< ServiceResponse<List<GetCharacterDto>>> GetAllCharacter()
+        public async Task< ServiceResponse<List<GetCharacterDto>>> GetAllCharacter(int UserId)
         {
             var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
-            serviceResponse.Data = _mapper.Map<List<GetCharacterDto>>(await _db.Characters.ToListAsync());
+            serviceResponse.Data = _mapper.Map<List<GetCharacterDto>>(await _db.Characters.Where(x=> x.User.Id==UserId).ToListAsync());
             return serviceResponse;
         }
 
