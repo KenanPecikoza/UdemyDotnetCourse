@@ -15,5 +15,7 @@ namespace UdemyDotnetCourse.Models
         public int Intelligence { get; set; } = 20;
         public RpgClass Class { get; set; } = RpgClass.Kinght;
         public User User { get; set; }
+        public int UserId { get; set; }
+        public Weapon Weapon { get; set; }
     }
 }

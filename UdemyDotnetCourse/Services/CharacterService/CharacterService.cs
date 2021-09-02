@@ -58,7 +58,7 @@ namespace UdemyDotnetCourse.Services.CharacterService
             var serviceResponse = new ServiceResponse<GetCharacterDto>();
             try
             {
-                var character = await _db.Characters.Where(x=> x.User.Id==GetUserId()).FirstOrDefaultAsync(x => x.Id == updatedCharacter.Id);
+                var character = await _db.Characters.Where(x=> x.UserId==GetUserId()).FirstOrDefaultAsync(x => x.Id == updatedCharacter.Id);
                 if (character != null)
                 {
                     _mapper.Map(updatedCharacter, character);
@@ -85,12 +85,12 @@ namespace UdemyDotnetCourse.Services.CharacterService
             var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
             try
             {
-                var character = await _db.Characters.FirstOrDefaultAsync(x => x.Id ==id && x.User.Id==GetUserId());
+                var character = await _db.Characters.FirstOrDefaultAsync(x => x.Id ==id && x.UserId==GetUserId());
                 if (character!=null)
                 {
                     _db.Remove(character);
                     await _db.SaveChangesAsync();
-                    serviceResponse.Data = _mapper.Map<List<GetCharacterDto>>(_db.Characters.Where(x=> x.User.Id==GetUserId()));
+                    serviceResponse.Data = _mapper.Map<List<GetCharacterDto>>(_db.Characters.Where(x=> x.UserId==GetUserId()));
                 }
                 else
                 {
