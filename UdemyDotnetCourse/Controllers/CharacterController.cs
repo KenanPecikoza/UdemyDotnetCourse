@@ -23,7 +23,7 @@ namespace UdemyDotnetCourse.Controllers
         [HttpGet("GetAll")]
         public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>>Get()
         {
-            return await _service.GetAllCharacer();
+            return await _service.GetAllCharacter();
         }
 
         [HttpGet("{id}")]
