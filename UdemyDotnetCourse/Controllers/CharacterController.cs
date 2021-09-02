@@ -26,9 +26,7 @@ namespace UdemyDotnetCourse.Controllers
         [HttpGet("GetAll")]
         public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>>Get()
         {
-            //                                                  tip koji je nameIdentifier i daj njegovu vrijednost 
-            int id = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
-            return await _service.GetAllCharacter(id);
+            return await _service.GetAllCharacter();
         }
 
         [HttpGet("{id}")]
