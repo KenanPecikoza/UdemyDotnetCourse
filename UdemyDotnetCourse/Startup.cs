@@ -39,6 +39,7 @@ namespace UdemyDotnetCourse
 
 
             services.AddScoped<ICharacterService, CharacterService>();
+            services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddAutoMapper(typeof(Startup));
 
             services.AddDbContext<DataContext>(x =>

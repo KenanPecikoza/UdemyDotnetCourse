@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,21 +29,21 @@ namespace UdemyDotnetCourse.Services.CharacterService
             var entity = _mapper.Map<Character>(newCharacter);
             _db.Add(entity);
             _db.SaveChanges();
-            serviceResponse.Data = _mapper.Map<List<GetCharacterDto>>(_db.Characters);
+            serviceResponse.Data = _mapper.Map<List<GetCharacterDto>>(await _db.Characters.ToListAsync());
             return serviceResponse ;
         }
 
-        public async ServiceResponse<List<GetCharacterDto>> GetAllCharacter()
+        public async Task< ServiceResponse<List<GetCharacterDto>>> GetAllCharacter()
         {
             var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
-            serviceResponse.Data = _mapper.Map<List<GetCharacterDto>>(_db.Characters);
+            serviceResponse.Data = _mapper.Map<List<GetCharacterDto>>(await _db.Characters.ToListAsync());
             return serviceResponse;
         }
 
         public async Task<ServiceResponse<GetCharacterDto>> GetCharacterById(int id)
         {
             var serviceResponse = new ServiceResponse<GetCharacterDto>();
-            serviceResponse.Data = _mapper.Map<GetCharacterDto>(_db.Characters.FirstOrDefault(x=> x.Id==id));
+            serviceResponse.Data = _mapper.Map<GetCharacterDto>(await _db.Characters.FirstOrDefaultAsync(x=> x.Id==id));
 
             return serviceResponse;
 
@@ -53,7 +54,7 @@ namespace UdemyDotnetCourse.Services.CharacterService
             var serviceResponse = new ServiceResponse<GetCharacterDto>();
             try
             {
-                var character = _db.Characters.First(x => x.Id == updatedCharacter.Id);
+                var character = await _db.Characters.FirstAsync(x => x.Id == updatedCharacter.Id);
                 _mapper.Map(updatedCharacter, character);
                 _db.SaveChanges();
                 serviceResponse.Data = _mapper.Map<GetCharacterDto>(character);
@@ -72,7 +73,7 @@ namespace UdemyDotnetCourse.Services.CharacterService
             var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
             try
             {
-                var character = _db.Characters.First(x => x.Id ==id);
+                var character = await _db.Characters.FirstAsync(x => x.Id ==id);
                 _db.Remove(character);
                 _db.SaveChanges();
                 serviceResponse.Data = _mapper.Map<List<GetCharacterDto>>(_db.Characters);
