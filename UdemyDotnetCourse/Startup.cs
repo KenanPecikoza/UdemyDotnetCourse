@@ -18,6 +18,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UdemyDotnetCourse.Data;
 using UdemyDotnetCourse.Services.CharacterService;
+using UdemyDotnetCourse.Services.FightService;
 using UdemyDotnetCourse.Services.WeaponService;
 
 namespace UdemyDotnetCourse
@@ -54,6 +55,7 @@ namespace UdemyDotnetCourse
             services.AddScoped<ICharacterService, CharacterService>();
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<IWeaponService, WeaponService>();
+            services.AddScoped<IFightService, FightService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddAutoMapper(typeof(Startup));

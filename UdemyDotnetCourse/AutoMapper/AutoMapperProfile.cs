@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UdemyDotnetCourse.Dtos.Character;
+using UdemyDotnetCourse.Dtos.Fight;
 using UdemyDotnetCourse.Dtos.Skill;
 using UdemyDotnetCourse.Dtos.Weapon;
 using UdemyDotnetCourse.Models;
@@ -24,7 +25,8 @@ namespace UdemyDotnetCourse.AutoMapper
             CreateMap<UpdateWeaponDto, Weapon>();
             //Skill
             CreateMap<Skill, GetSkillDto>().ReverseMap();
-
+            //HighScore
+            CreateMap<Character, HighScoreDto>();
         }
 
     }
