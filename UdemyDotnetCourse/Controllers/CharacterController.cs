@@ -63,7 +63,11 @@ namespace UdemyDotnetCourse.Controllers
             }
             return response;
         }
-
+        [HttpPost("Skills")]
+        public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> AddCharacterSkill ([FromBody] AddCharacterSkillDto addSkillRequest)
+        {
+            return await _service.AddCharacterSkill(addSkillRequest);
+        }
 
     }
 }

@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using UdemyDotnetCourse.Data;
 using UdemyDotnetCourse.Dtos.Character;
+using UdemyDotnetCourse.Dtos.Weapon;
 using UdemyDotnetCourse.Models;
 
 namespace UdemyDotnetCourse.Services.CharacterService
@@ -40,14 +41,15 @@ namespace UdemyDotnetCourse.Services.CharacterService
         public async Task< ServiceResponse<List<GetCharacterDto>>> GetAllCharacter()
         {
             var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
-            serviceResponse.Data = _mapper.Map<List<GetCharacterDto>>(await _db.Characters.Where(x=> x.User.Id==GetUserId()).ToListAsync());
+            var data = _mapper.Map<List<GetCharacterDto>>(await _db.Characters.Include(x=> x.Weapon).Include(x=> x.Skills).Where(x => x.User.Id == GetUserId()).ToListAsync());
+            serviceResponse.Data = data;
             return serviceResponse;
         }
 
         public async Task<ServiceResponse<GetCharacterDto>> GetCharacterById(int id)
         {
             var serviceResponse = new ServiceResponse<GetCharacterDto>();
-            serviceResponse.Data = _mapper.Map<GetCharacterDto>(await _db.Characters.FirstOrDefaultAsync(x=> x.Id==id && x.User.Id==GetUserId()));
+            serviceResponse.Data = _mapper.Map<GetCharacterDto>(await _db.Characters.Include(x=> x.Weapon).Include(x=> x.Skills).FirstOrDefaultAsync(x=> x.Id==id && x.User.Id==GetUserId()));
 
             return serviceResponse;
 
@@ -96,6 +98,7 @@ namespace UdemyDotnetCourse.Services.CharacterService
                 {
                     serviceResponse.Success = false;
                     serviceResponse.Message = "Character not found";
+                    return serviceResponse;
 
                 }
 
@@ -108,6 +111,37 @@ namespace UdemyDotnetCourse.Services.CharacterService
             }
 
             return serviceResponse;
+        }
+
+        public async Task<ServiceResponse<GetCharacterDto>> AddCharacterSkill(AddCharacterSkillDto addSkillRequest)
+        {
+            var response = new ServiceResponse<GetCharacterDto>();
+            try
+            {
+                var character = await _db.Characters.Include(x=> x.Weapon).Include(x=> x.Skills).FirstOrDefaultAsync(x => x.Id == addSkillRequest.CharacterId && x.UserId == GetUserId());
+                if (character==null)
+                {
+                    response.Message = "Character not found";
+                    response.Success = false;
+                    return response;
+                }
+                var skill = await _db.Skills.FirstOrDefaultAsync(x => x.Id == addSkillRequest.SkillId);
+                if (character == null)
+                {
+                    response.Message = "Skill not found";
+                    response.Success = false;
+                    return response;
+                }
+                character.Skills.Add(skill);
+                await _db.SaveChangesAsync();
+                response.Data = _mapper.Map<GetCharacterDto>(character);
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+            return response;
         }
     }
 }

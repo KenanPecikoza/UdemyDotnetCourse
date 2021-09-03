@@ -18,6 +18,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UdemyDotnetCourse.Data;
 using UdemyDotnetCourse.Services.CharacterService;
+using UdemyDotnetCourse.Services.WeaponService;
 
 namespace UdemyDotnetCourse
 {
@@ -52,6 +53,9 @@ namespace UdemyDotnetCourse
 
             services.AddScoped<ICharacterService, CharacterService>();
             services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<IWeaponService, WeaponService>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             services.AddAutoMapper(typeof(Startup));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
@@ -63,7 +67,6 @@ namespace UdemyDotnetCourse
                     ValidateAudience = false
                 }; 
             });
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddDbContext<DataContext>(x =>
             x.UseSqlServer(Configuration.GetConnectionString("udemyDotnetCourse")));
         }
